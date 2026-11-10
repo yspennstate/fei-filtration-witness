@@ -1,0 +1,5 @@
+k= 2: new coordinate F=2.9501 E/Inf=2.6725;  bent coordinates F min 0.8908 max 0.8908, E/Inf min 0.8908 max 0.8908;  best F over all 0.8908
+k= 4: new coordinate F=5.3513 E/Inf=5.2244;  bent coordinates F min 1.6993 max 1.6993, E/Inf min 1.6208 max 1.6208;  best F over all 1.6993
+k= 6: new coordinate F=7.4256 E/Inf=7.3868;  bent coordinates F min 1.9285 max 1.9285, E/Inf min 1.8959 max 1.8959;  best F over all 1.9285
+k= 8: new coordinate F=9.4392 E/Inf=9.4286;  bent coordinates F min 1.9831 max 1.9831, E/Inf min 1.9733 max 1.9733;  best F over all 1.9831
+k=10: new coordinate F=11.4419 E/Inf=11.4392;  bent coordinates F min 1.9959 max 1.9959, E/Inf min 1.9933 max 1.9933;  best F over all 1.9959

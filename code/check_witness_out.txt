@@ -1,0 +1,25 @@
+min over i and orders of L/Inf, and min over i of E/Inf:
+  AND_6       F = 2.2922   min E/Inf = 2.2922
+  AND_8       F = 2.1048   min E/Inf = 2.1048
+  AND_10      F = 2.0341   min E/Inf = 2.0341
+  MAJ_3       F = 1.0000   min E/Inf = 0.0000
+  MAJ_5       F = 1.5204   min E/Inf = 0.0000
+  MAJ_7       F = 1.7848   min E/Inf = 0.0000
+  MAJ_9       F = 1.9578   min E/Inf = 0.0000
+  MAJ_11      F = 2.0844   min E/Inf = 0.0000
+  TRIBES_2x3  F = 2.3160   min E/Inf = 2.3160
+  TRIBES_2x4  F = 3.0428   min E/Inf = 3.0428
+  TRIBES_2x5  F = 3.3892   min E/Inf = 3.3892
+  TRIBES_3x3  F = 2.5474   min E/Inf = 2.5474
+functions in sections 1-2: 58
+  A: E - L (<= 0): 2.220446049250313e-16
+  A: L - h(Inf) (<= 0): 0.0
+  ladder: E - L3, L3 - L2, L2 - L1 (<= 0): 2.220446049250313e-16
+  ladder: |L_m - E| (r = m, ~0): 0.0
+  B: L - two-sequence bound (<= 0): -0.19561336893809517
+  A: |shortest path - brute min|: 2.220446049250313e-16
+  A: martingale form error: 0.0
+  B: resampling identities error: 0.0
+  C: composition |E_i(f) - formula|: 3.3306690738754696e-16
+  C: |Inf_i(f) - Inf_i(g) ||F1||^2|: 0.0
+  D: private AND, lo - E/Inf, E/Inf - L/Inf, L/Inf - hi (<= 0): 7.105427357601002e-15

@@ -1,0 +1,382 @@
+\documentclass[11pt]{amsart}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[margin=1.1in]{geometry}
+\usepackage{hyperref}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{example}[theorem]{Example}
+
+\newcommand{\Inf}{\mathrm{Inf}}
+\newcommand{\Var}{\mathrm{Var}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\lab}{\mathrm{lab}}
+
+\title{A filtration bound for the erasure entropies of Boolean functions}
+\author{Yitzchak Shmalo}
+\date{}
+
+\begin{document}
+
+\begin{abstract}
+For a Boolean function $f$ and a coordinate $i$, the erasure entropy $E_i(f)$ is the conditional entropy of the event
+$i\in U$ given $U\setminus\{i\}$, where $U$ is drawn from the spectral distribution $\hat f^2$. The Fourier
+entropy-influence conjecture is equivalent to the existence of an absolute $c$ such that every non-constant $f$ has a
+coordinate with $E_i(f)\le c\,\Inf_i(f)$. We bound $E_i$ from above by revealing the other coordinates one at a time
+and conditioning only on the last revealed coordinate that the spectral sample contains. The resulting quantity
+$L^\pi_i$ depends on the order $\pi$, is a sum, over the steps, of a two-variable entropy of the squared increments of
+the Doob martingales of $E_if$ and $D_if$, lies between $E_i$ and the binary entropy of $\Inf_i$, and can be minimised
+over all orders by a shortest-path recursion. We show that $L^\pi_i=O(\Inf_i)$ whenever, along the order, the
+probability that $i$ is pivotal both before and after the not yet revealed coordinates are resampled, times the block
+influence of those coordinates, is $O(\Inf_i^2)$. We also give an exact formula for $E_i$ under block composition, and
+show that a coordinate whose variable enters only through one AND of $k+1$ variables, pivotal with probability $\rho$,
+has $L^\pi_i/\Inf_i\le2+2^{-k}(2k+\log_2(1/\rho))$ for a suitable order. Conditioning on the last $r$ revealed coordinates gives a
+decreasing family of bounds that reaches $E_i$ at $r=n-1$.
+\end{abstract}
+
+\maketitle
+
+\section{Introduction}
+
+For $f\colon\{-1,1\}^n\to\{-1,1\}$ write $f=\sum_S\hat f(S)\chi_S$, and let $U$ be a random subset with
+$\Pr[U=S]=\hat f(S)^2$. The Fourier entropy is $H(f)=H(U)$ and the total influence is $I(f)=\E|U|=\sum_i\Inf_i(f)$, where
+$\Inf_i(f)=\Pr[i\in U]$. The Fourier entropy-influence (FEI) conjecture of Friedgut and Kalai~\cite{FK96} asks for an
+absolute $C$ with $H(f)\le C\,I(f)$ for every Boolean $f$.
+
+One route to the conjecture goes through a single coordinate at a time. The drop of the entropy from $f$ to its two
+restrictions at $x_i=\pm1$ splits into the erasure entropy
+\[
+E_i(f)=H\bigl(\mathbf 1[i\in U]\bigm| U\setminus\{i\}\bigr)
+\]
+and a Jensen--Shannon term $J_i(f)\le(2/\ln 2)\Inf_i(f)$. The route goes back to Han~\cite[Remarks~3.1--3.2]{Han}; the
+splitting is equation~(32) of Gonz\'alez, MacManus and Pereyra~\cite{GMP}. In
+\cite{Shm1} it is shown that the conjecture holds if and only if there is an absolute $c$ such that every non-constant
+Boolean function has a coordinate $i$ with
+\begin{equation}\label{eq:good}
+E_i(f)\le c\,\Inf_i(f),
+\end{equation}
+and in~\cite{Shm3} this quantity is studied directly. The difficulty is that $E_i$ conditions on the whole of
+$U\setminus\{i\}$, an object with up to $2^{n-1}$ values. The trivial bound $E_i\le H(\mathbf 1[i\in U])$ loses a factor
+$\log(1/\Inf_i)$, and~\eqref{eq:good} asks exactly to remove that factor at one coordinate.
+
+Here we condition on less. Reveal the other coordinates in a fixed order and record only the position of the last
+revealed coordinate that $U$ contains. This gives an upper bound $L^\pi_i$ for $E_i$ (Theorem~\ref{thm:witness}) with a
+martingale form: at each step it compares how much of the restriction $E_if$ and how much of the derivative $D_if$ the
+newly revealed coordinate explains. A two-sequence inequality turns a product condition along the order into the bound
+$L^\pi_i=O(\Inf_i)$ (Theorem~\ref{thm:suff}), and the product condition has a direct reading in terms of resampling.
+Section~\ref{sec:comp} gives an exact composition formula for $E_i$, Section~\ref{sec:private} the case of a private
+AND, and Section~\ref{sec:windows} the windows of length $r$. Section~\ref{sec:num} lists exact values.
+
+\section{The witness}\label{sec:witness}
+
+Fix $i$ and write $g=E_if$ and $h=D_if$ for the functions of the other coordinates
+\[
+g=\tfrac12\bigl(f|_{x_i=1}+f|_{x_i=-1}\bigr),\qquad h=\tfrac12\bigl(f|_{x_i=1}-f|_{x_i=-1}\bigr).
+\]
+They take values in $\{-1,0,1\}$, have disjoint supports, $\hat g(T)=\hat f(T)$ and $\hat h(T)=\hat f(T\cup\{i\})$ for
+$T\not\ni i$, $\E h^2=\Inf_i(f)=:\delta$ and $\E g^2=1-\delta$. Put $p(T)=\hat f(T)^2$ and $q(T)=\hat f(T\cup\{i\})^2$ for
+$T\subseteq[n]\setminus\{i\}$, and
+\[
+\Phi(a,b)=\eta(a)+\eta(b)-\eta(a+b)=(a+b)\,h_2\Bigl(\frac{b}{a+b}\Bigr),\qquad \eta(x)=-x\log_2x,
+\]
+where $h_2$ is the binary entropy. Then $E_i(f)=\sum_T\Phi(p(T),q(T))$, since $(U\setminus\{i\},\mathbf 1[i\in U])$ takes
+the value $(T,0)$ with probability $p(T)$ and $(T,1)$ with probability $q(T)$. The function $\Phi$ is concave,
+homogeneous of degree one and increasing in each argument; in particular it is superadditive.
+
+Let $\pi=(j_1,\dots,j_m)$, $m=n-1$, be an order of the other coordinates, and let $S_k=\{j_1,\dots,j_k\}$. For
+$T\subseteq[n]\setminus\{i\}$ let $\lab(T)=\max\{k:j_k\in T\}$, with $\lab(\emptyset)=0$, and put
+\[
+A_k=\sum_{\lab(T)=k}p(T),\qquad B_k=\sum_{\lab(T)=k}q(T),\qquad L^\pi_i(f)=\sum_{k=0}^m\Phi(A_k,B_k).
+\]
+
+\begin{theorem}\label{thm:witness}
+For every Boolean $f$, coordinate $i$ and order $\pi$:
+\begin{enumerate}
+\item[(a)] $E_i(f)\le L^\pi_i(f)\le h_2(\Inf_i(f))$.
+\item[(b)] With $\mathcal F_k$ the $\sigma$-algebra generated by $x_{j_1},\dots,x_{j_k}$,
+\[
+A_k=\E\bigl(\E[g\mid\mathcal F_k]-\E[g\mid\mathcal F_{k-1}]\bigr)^2,\qquad
+B_k=\E\bigl(\E[h\mid\mathcal F_k]-\E[h\mid\mathcal F_{k-1}]\bigr)^2
+\]
+for $k\ge1$, and $A_0=(\E g)^2$, $B_0=(\E h)^2$.
+\item[(c)] Let $a(R)=\sum_{T\subseteq R}p(T)$ and $b(R)=\sum_{T\subseteq R}q(T)$. Then $\min_\pi L^\pi_i=\beta(R_*)$ for
+the full set $R_*=[n]\setminus\{i\}$, where $\beta(\emptyset)=\Phi(a(\emptyset),b(\emptyset))$ and
+\[
+\beta(R)=\min_{j\in R}\Bigl(\beta(R\setminus\{j\})+\Phi\bigl(a(R)-a(R\setminus\{j\}),\,b(R)-b(R\setminus\{j\})\bigr)\Bigr).
+\]
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+(a) The pair $(\lab(U\setminus\{i\}),\mathbf 1[i\in U])$ takes the value $(k,0)$ with probability $A_k$ and $(k,1)$ with
+probability $B_k$, so $L^\pi_i=H(\mathbf 1[i\in U]\mid\lab(U\setminus\{i\}))$. Since $\lab(U\setminus\{i\})$ is a
+function of $U\setminus\{i\}$, conditioning on it cannot give a smaller entropy than conditioning on
+$U\setminus\{i\}$, and it cannot give a larger one than conditioning on nothing, which is $h_2(\delta)$.
+
+(b) $\E[g\mid\mathcal F_k]=\sum_{T\subseteq S_k}\hat g(T)\chi_T$, so the $k$-th increment is
+$\sum_{\lab(T)=k}\hat g(T)\chi_T$, whose squared norm is $A_k$ by Parseval. The same holds for $h$.
+
+(c) The sets $\{T:\lab(T)\le k\}$ are the subsets of $S_k$, so $A_k=a(S_k)-a(S_{k-1})$ and $B_k=b(S_k)-b(S_{k-1})$. An
+order is a maximal chain $\emptyset=S_0\subset S_1\subset\dots\subset S_m=R_*$, and $L^\pi_i$ is a sum of costs along
+its edges. The recursion is the shortest path in this graph.
+\end{proof}
+
+The recursion costs $O(m2^m)$ operations per coordinate, against $m!$ orders. Part (b) says that $L^\pi_i$ follows the
+Doob martingales of $g$ and of $h$ along the order and charges, at each step, the entropy of telling the two increments
+apart. A coordinate is good along $\pi$ when $h$ is explained late, after most of $g$ has been explained.
+
+\section{A sufficient condition}\label{sec:suff}
+
+\begin{lemma}\label{lem:two}
+Let $A_k,B_k\ge0$ for $k=0,\dots,m$, let $\delta=\sum_kB_k>0$, and suppose that for some $M\ge0$
+\[
+\Bigl(\sum_{k\ge K}A_k\Bigr)\Bigl(\sum_{k\le K}B_k\Bigr)\le M\delta^2\qquad\text{for every }K=0,\dots,m.
+\]
+Then $\sum_k\Phi(A_k,B_k)\le\bigl(1/\ln2+4+2\log_2(1+2M)\bigr)\delta$.
+\end{lemma}
+
+\begin{proof}
+Since $a\log_2(1+b/a)\le b/\ln 2$, we have $\Phi(a,b)\le b/\ln2+\psi(a,b)$ with $\psi(a,b)=b\log_2(1+a/b)$. The function
+$\psi$ is concave, homogeneous of degree one and increasing in each argument, so $\sum_{k\in G}\psi(A_k,B_k)\le
+\psi(A_G,B_G)$ for every set $G$ of indices, where $A_G=\sum_{k\in G}A_k$. Put $\beta_k=\delta^{-1}\sum_{l\le k}B_l$,
+which is nondecreasing, and $G_j=\{k:2^{-j-1}<\beta_k\le2^{-j}\}$ for $j\ge0$. Indices with $\beta_k=0$ have $B_k=0$ and
+contribute nothing. For $k_j=\min G_j$ the hypothesis gives $A_{G_j}\le\sum_{k\ge k_j}A_k\le M\delta/\beta_{k_j}\le
+2^{j+1}M\delta$, and $B_{G_j}\le\beta_{\max G_j}\delta\le2^{-j}\delta$. Hence
+\[
+\sum_{k\in G_j}\psi(A_k,B_k)\le2^{-j}\delta\log_2\bigl(1+2^{2j+1}M\bigr)\le2^{-j}\delta\bigl(2j+\log_2(1+2M)\bigr),
+\]
+and summing over $j$ with $\sum_j2^{-j}=2$ and $\sum_jj2^{-j}=2$ gives the claim.
+\end{proof}
+
+For a set $R$ of coordinates other than $i$, let $x^R$ be $x$ with the coordinates in $R$ replaced by independent
+uniform bits, and put
+\begin{align*}
+W(R)&=\E\,h(x)h(x^R)=\Pr[i\in U,\ U\cap R=\emptyset],\\
+V(R)&=\E g^2-\E\,g(x)g(x^R)=\Pr[i\notin U,\ U\cap R\neq\emptyset].
+\end{align*}
+$W(R)$ is the correlation of the pivotality of $i$, with its sign, at $x$ and at $x^R$, and $V(R)$ is the influence of the block
+$R$ on $g$. The two equalities are Parseval: $\E\,u(x)u(x^R)=\sum_{T\cap R=\emptyset}\hat u(T)^2$.
+
+\begin{theorem}\label{thm:suff}
+Let $\pi$ be an order and $R_k=R_*\setminus S_k$ the set of coordinates not yet revealed after step $k$. Then
+$\sum_{l\le k}B_l=W(R_k)$ and $\sum_{l\ge k}A_l=V(R_{k-1})$. Consequently, if
+\[
+W(R_k)\,V(R_{k-1})\le M\,\Inf_i(f)^2\qquad\text{for }k=1,\dots,m,
+\]
+then $L^\pi_i(f)\le\bigl(1/\ln2+4+2\log_2(1+2\max(M,1))\bigr)\Inf_i(f)$.
+\end{theorem}
+
+\begin{proof}
+$\lab(T)\le k$ means $T\subseteq S_k$, that is $T\cap R_k=\emptyset$, which gives the first identity; $\lab(T)\ge k$ means
+$T\cap R_{k-1}\ne\emptyset$, which gives the second. For $K=0$ the product in Lemma~\ref{lem:two} is
+$(1-\delta)\hat f(\{i\})^2\le\delta^2$, because $|\hat f(\{i\})|=|\E h|\le\Pr[h\ne0]=\delta$. Apply Lemma~\ref{lem:two}
+with $\max(M,1)$.
+\end{proof}
+
+In words: $i$ is good along $\pi$ if at every stage either the value of $g$ is almost settled by the revealed
+coordinates (the resampled block has small influence on $g$), or the revealed coordinates say little about whether $i$
+is pivotal (resampling the rest destroys the pivotality of $i$). Because $W$ decreases and $V$ increases with $R$, a coarser
+chain $R_*=R'_0\supset R'_1\supset\dots\supset R'_t=\emptyset$ that the order refines suffices: if
+$W(R'_{s+1})V(R'_s)\le M\Inf_i(f)^2$ for every $s$, the condition of Theorem~\ref{thm:suff} holds for every order that
+reveals $R'_s\setminus R'_{s+1}$ in block $s$.
+
+Write $\mathcal D=\{h\ne0\}$, $\mathcal L=\{g=-1\}$ and $\mathcal H=\{g=1\}$. Since $g\in\{-1,0,1\}$ and
+$V(R)=\tfrac12\E(g(x)-g(x^R))^2$, every Boolean $f$ has $V(R)=\Pr[x\in\mathcal D,\,x^R\notin\mathcal D]+
+4\Pr[x\in\mathcal L,\,x^R\in\mathcal H]$; if $f$ is monotone, then $h\ge0$ and $W(R)=\Pr[x\in\mathcal D,\,x^R\in\mathcal D]$.
+For monotone $f$ the condition reads: the probability of staying in the pivotal band times the probability of jumping
+across it is $O(\Pr[\mathcal D]^2)$.
+
+For example, let $f$ be the OR of $s$ disjoint ANDs of width $w$, let $i$ lie in the first AND, let $Q$ be the set of
+the other $w-1$ variables of that AND, and let $P_0=(1-2^{-w})^{s-1}$ be the probability that no other AND is
+satisfied. Take the chain $R_*\supset Q\supset\emptyset$, that is, reveal the other ANDs first and $Q$ last. Here
+$x\in\mathcal D$ when no other AND is satisfied and every variable of $Q$ is true, so $\delta=\Inf_i(f)=P_02^{1-w}$ and
+$W(Q)=P_04^{1-w}=\delta^2/P_0$; with $V(R_*)\le1$ the first product is at most $\delta^2/P_0$. A move from $\mathcal L$ to
+$\mathcal H$ needs another AND to change, so resampling $Q$ cannot make it, and $V(Q)\le\Pr[x\in\mathcal D]=\delta$; with
+$W(\emptyset)=\delta$ the second product is at most $\delta^2$. The condition therefore holds with $M=1/P_0$, which is
+bounded in the usual regime $s\approx2^w\ln2$, where $P_0$ is close to $\tfrac12$.
+
+\begin{conjecture}[filtration form]\label{conj:fwc}
+There is an absolute $c$ such that every non-constant Boolean $f$ has a coordinate $i$ and an order $\pi$ of the other
+coordinates with $L^\pi_i(f)\le c\,\Inf_i(f)$.
+\end{conjecture}
+
+By Theorem~\ref{thm:witness}(a) and~\cite{Shm1}, Conjecture~\ref{conj:fwc} implies the FEI conjecture with constant
+$c+2/\ln2$: the class of Boolean functions is closed under restriction, and the one-coordinate step applies at the
+coordinate given by the conjecture in every restriction. Conjecture~\ref{conj:fwc} is a strengthening of~\eqref{eq:good};
+Section~\ref{sec:num} shows no counterexample among the functions we can evaluate exactly, and Section~\ref{sec:windows}
+discusses where a single last element may not be enough.
+
+\section{Composition}\label{sec:comp}
+
+\begin{proposition}\label{prop:comp}
+Let $B$ and $Z$ be disjoint sets of coordinates, let $g\colon\{-1,1\}^B\to\{-1,1\}$ and
+$F\colon\{-1,1\}\times\{-1,1\}^Z\to\{-1,1\}$ be Boolean, and put $f(x_B,z)=F(g(x_B),z)$. Write $F(u,z)=F_0(z)+uF_1(z)$. For $i\in B$,
+\[
+\Inf_i(f)=\Inf_i(g)\,\|F_1\|_2^2,
+\]
+\[
+E_i(f)=\|F_1\|_2^2\Bigl(E_i(g)-\Phi\bigl(\hat g(\emptyset)^2,\hat g(\{i\})^2\bigr)\Bigr)
++\sum_{T\subseteq Z}\Phi\Bigl(\bigl(\hat F_0(T)+\hat g(\emptyset)\hat F_1(T)\bigr)^2,\ \hat g(\{i\})^2\hat F_1(T)^2\Bigr).
+\]
+\end{proposition}
+
+\begin{proof}
+For $T_1\subseteq B$ and $T_2\subseteq Z$, $\hat f(T_1\cup T_2)=[T_1=\emptyset]\hat F_0(T_2)+\hat g(T_1)\hat F_1(T_2)$.
+For $i\notin T_1\ne\emptyset$ the pair $(p,q)$ at $T_1\cup T_2$ is $\hat F_1(T_2)^2$ times the pair of $g$ at $T_1$, so by
+homogeneity these terms sum to $\|F_1\|^2$ times the terms of $E_i(g)$ with $T_1\ne\emptyset$. The terms with
+$T_1=\emptyset$ form the last sum. The influence is the sum of $q$.
+\end{proof}
+
+The last sum depends on $g$ only through $\hat g(\emptyset)$ and $\hat g(\{i\})$. When $g$ is itself a composition this
+can be iterated, which gives $E_i$ and $\Inf_i$ of iterated block compositions from the spectra of the gates; the
+iteration for $g(h,\dots,h)$, carrying four numbers per leaf through each level, is in~\cite[Section~2]{Shm3}, where
+it is used for towers of transitive gates. O'Donnell and Tan~\cite{OT13} prove a composition theorem for the
+conjecture itself.
+
+\section{A private AND}\label{sec:private}
+
+\begin{proposition}\label{prop:private}
+Let $i$ and a set $B$ of $k\ge0$ other coordinates enter $f$ only through $a=\mathbf 1[x_i=x_b=1\text{ for all }b\in B]$,
+so that $f=A(v)+c(v)\,a$ with $v$ the remaining coordinates and $c\in\{0,\pm2\}$. Let $\delta=\Inf_i(f)=2^{-k}\Pr[c\ne0]>0$
+and let $\pi$ reveal $v$ first and $B$ last. Then
+\[
+2\bigl(1-2^{-k}\bigr)\le\frac{E_i(f)}{\delta}\le\frac{L^\pi_i(f)}{\delta}\le2\bigl(1-2^{-k}\bigr)+2^{-k}\log_2\frac{e\,2^k}{\delta}.
+\]
+\end{proposition}
+
+\begin{proof}
+In $\pm1$ notation $a=2^{-(k+1)}\sum_{S\subseteq B\cup\{i\}}\chi_S$. Hence for $V\subseteq v$ and $S\subseteq B$, the
+coefficient of $f$ at $V\cup S\cup\{i\}$ is $2^{-(k+1)}\hat c(V)$, and at $V\cup S$ it is the same number when
+$S\ne\emptyset$. Put $p_V=4^{-(k+1)}\hat c(V)^2$; then $\delta=\sum_Sq=2^k\sum_Vp_V$. Every $T=V\cup S$ with $S\ne\emptyset$
+has $p(T)=q(T)=p_V$ and contributes $\Phi(p_V,p_V)=2p_V$; there are $2^k-1$ such $S$ for each $V$, which gives
+$2(1-2^{-k})\delta$, and the remaining terms of $E_i$ are nonnegative. In the witness, the label of $V\cup S$ with
+$S\ne\emptyset$ is the position of the last element of $S$; the $r$-th element of $B$ is the last element of $2^{r-1}$
+sets $S$, so this atom has $A=B=2^{r-1}\sum_Vp_V$ and contributes $2^r\sum_Vp_V$, again $2(1-2^{-k})\delta$ in total. The
+atoms of the sets $T=V$ carry $q$-mass $Q=2^{-k}\delta$ and $p$-mass $P=1-2\delta+2^{-k}\delta$, so $P+Q\le1$. By
+superadditivity their contribution is at most $\Phi(P,Q)\le Q/\ln2+Q\log_2((P+Q)/Q)\le Q\log_2(e/Q)$.
+\end{proof}
+
+Since $\delta=2^{-k}\Pr[c\ne0]$, the right-hand side is $2+2^{-k}\bigl(2k+\log_2e-2+\log_2(1/\Pr[c\ne0])\bigr)$, which
+is less than $2+2^{-k}\bigl(2k+\log_2(1/\Pr[c\ne0])\bigr)$, so
+the ratio tends to $2$ as the private AND grows, unless it is pivotal with probability below about $2^{-2^k}$. The same
+computation applies to any private gadget whose Fourier coefficients at $S$ and $S\cup\{i\}$ agree in absolute value for
+every non-empty $S$. Width-dependent bounds for every DNF, with no privacy assumption, are in~\cite{Shm3}.
+
+\section{Windows}\label{sec:windows}
+
+For $1\le r\le m$ let $\lab_r(T)$ be the set of the last $r$ positions of $\pi$ met by $T$ (all of them if $|T|<r$), and
+\[
+L^{\pi,r}_i(f)=H\bigl(\mathbf 1[i\in U]\bigm|\lab_r(U\setminus\{i\})\bigr).
+\]
+Then $L^{\pi,1}_i=L^\pi_i$, $L^{\pi,m}_i=E_i$, and
+\[
+E_i(f)\le L^{\pi,r}_i(f)\le L^{\pi,r-1}_i(f),
+\]
+because $\lab_{r-1}$ is a function of $\lab_r$, which is a function of $U\setminus\{i\}$. The masses of the atoms of $L^{\pi,r}_i$
+are signed sums, by inclusion and exclusion, of resampling correlations of derivatives of order at most $r$: for
+distinct coordinates $k_1,\dots,k_s$ other than $i$ and a set $R$ of coordinates disjoint from them,
+$\Pr[i\in U,\,k_1,\dots,k_s\in U,\,U\cap R=\emptyset]=\E\,D_{k_1}\cdots D_{k_s}h(x)\,D_{k_1}\cdots D_{k_s}h(x^R)$.
+
+The ladder runs from Conjecture~\ref{conj:fwc} at $r=1$ to~\eqref{eq:good} at $r=m$. Window $1$ sees only the last element
+of $U\setminus\{i\}$. When every variable lies in many overlapping certificates, the last element alone may carry
+little information about whether $i\in U$, while a pair of elements from one certificate of $i$ may carry much more.
+We do not know whether Conjecture~\ref{conj:fwc} holds, or whether it holds with some fixed window $r$ in place
+of $1$.
+
+\section{Exact values}\label{sec:num}
+
+The statements of Theorems~\ref{thm:witness} and~\ref{thm:suff}, Lemma~\ref{lem:two} and Propositions~\ref{prop:comp},
+\ref{prop:private} were checked with exact Walsh--Hadamard transforms. On $58$ random non-constant functions of $3$ to
+$7$ variables (each value $-1$ with probability $\tfrac12$, $0.2$ or $0.05$), at every coordinate and for every order
+when $n\le6$ and $150$ random orders when $n=7$: the bounds of Theorem~\ref{thm:witness}(a) hold to $3\cdot10^{-16}$,
+the shortest path of Theorem~\ref{thm:witness}(c) agrees with the minimum over all orders to $3\cdot10^{-16}$, the
+martingale form and the resampling identities hold exactly, the bound of Lemma~\ref{lem:two} holds with the smallest
+admissible $M$, and $E_i\le L^{\pi,3}_i\le L^{\pi,2}_i\le L^{\pi,1}_i$ with $L^{\pi,m}_i=E_i$. The composition
+formula on $60$ random compositions to $4\cdot10^{-16}$, and the bracket of Proposition~\ref{prop:private} on $80$ random
+private ANDs. The table gives $F=\min_{i,\pi}L^\pi_i/\Inf_i$ and $\min_iE_i/\Inf_i$; $\mathrm{TRIBES}_{w\times s}$ is
+the OR of $s$ disjoint ANDs of width $w$.
+\[
+\begin{array}{lcccccc}
+ & \mathrm{AND}_6 & \mathrm{AND}_8 & \mathrm{AND}_{10} & \mathrm{TRIBES}_{2\times3} & \mathrm{TRIBES}_{2\times4} & \mathrm{TRIBES}_{2\times5}\\
+F & 2.2922 & 2.1048 & 2.0341 & 2.3160 & 3.0428 & 3.3892\\
+\min_iE_i/\Inf_i & 2.2922 & 2.1048 & 2.0341 & 2.3160 & 3.0428 & 3.3892\\[4pt]
+ & \mathrm{MAJ}_3 & \mathrm{MAJ}_5 & \mathrm{MAJ}_7 & \mathrm{MAJ}_9 & \mathrm{MAJ}_{11} & \mathrm{TRIBES}_{3\times3}\\
+F & 1.0000 & 1.5204 & 1.7848 & 1.9578 & 2.0844 & 2.5474\\
+\min_iE_i/\Inf_i & 0 & 0 & 0 & 0 & 0 & 2.5474
+\end{array}
+\]
+On AND and tribes the witness of the best order equals $E_i$ at the best coordinate. The functions $\mathrm{AND}_n$ are
+the case $v=\emptyset$ of Proposition~\ref{prop:private}, and they sit just below its upper bound: at $n=10$,
+$F=2.034057$ against $2.034068$. On majority
+$E_i=0$, because the spectrum lives on odd sets and $U\setminus\{i\}$ determines the parity of $|U|$, while the witness
+pays for the last element; its growth along $n$ is slow and stays below $2.1$ at $n=11$.
+
+The coordinate matters. For even $k$ let $b(y)=(-1)^{N(y)}$ on $\{-1,1\}^k$, where $N(y)$ is the number of $j\le k/2$
+with $y_j=y_{j+k/2}=-1$ (the inner product function), let $\mathbf 1=(1,\dots,1)$, and let $f(y,x_i)=b(y)$ for
+$y\ne\mathbf 1$ and $f(\mathbf 1,x_i)=x_i$. For $k=2,4,6,8,10$ the coordinate $i$ has
+$E_i/\Inf_i=2.672,\,5.224,\,7.387,\,9.429,\,11.439$ and $\min_\pi L^\pi_i/\Inf_i=2.950,\,5.351,\,7.426,\,9.439,\,11.442$,
+while every coordinate $j$ of $y$ has $\min_\pi L^\pi_j/\Inf_j=0.891,\,1.699,\,1.929,\,1.983,\,1.996$. So $E_i/\Inf_i$
+grows about linearly in $k$ at $i$ while every other coordinate stays below $2$, and the choice of the coordinate in
+Conjecture~\ref{conj:fwc} cannot be dropped.
+
+\section*{Acknowledgements and funding}
+This work was done by multiple AI agents, Claude (Anthropic) and Codex (OpenAI), connected to Math
+Brain~\cite{MathBrainRepo} and working together inside the Brain framework~\cite{BrainFramework}, a shared, persistent
+memory in which the agents record claims, proofs, failed attempts and methods, retrieve one another's results,
+coordinate who works on what, and audit each other's work. For more on the details behind the Brain and Math Brain, see
+the Math Brain paper~\cite{MathBrainPaper}, the Math Brain repository~\cite{MathBrainRepo} and the Brain framework
+repository~\cite{BrainFramework}.
+
+The research presented in this paper was supported by the European Research Council (ERC) under the European Union's
+Horizon Europe research and innovation programme (grant agreement No.~101041711), by the Simons Foundation as part of
+the Collaboration on the Mathematical and Scientific Foundations of Deep Learning, by Heights Labs, by Convex Nexus
+Capital, by the Israel Science Foundation (grant number 2258/19), and by the Israel Science Foundation (ISF Grant
+4101/25). Computational resources were provided in part by Google Cloud through its education credits program (credit
+530550103).
+
+\section*{Declaration of competing interest}
+The author holds equity in Heights Labs and in Convex Nexus Capital and has a management role at Convex Nexus Capital.
+These entities are included in the funding declaration above.
+
+\section*{Declaration of generative AI and AI-assisted technologies}
+The paper comes out of Math Brain, an ongoing project on the use of AI systems for research mathematics, and its
+results were developed with the Brain~\cite{BrainFramework} and Math Brain~\cite{MathBrainRepo}. In November 2026 a
+Claude Fable agent (Anthropic), connected to the Brain and working alongside Codex agents running OpenAI's GPT-6.1 on
+the same problem, found the witness, its martingale form, the two-sequence condition and its resampling form, the
+composition formula, the private-AND bound and the windows. Claude Opus 5.5 (Anthropic)
+rederived each proof, wrote the numerical checks, prepared the manuscript and audited it. These checks are not peer
+review. The author directed the work and is responsible for the content of the paper and for decisions concerning its
+dissemination.
+
+\section*{Code and data availability}
+Code and outputs: \url{https://github.com/yspennstate/fei-filtration-witness}.
+
+The paper is part of the Math Brain project, whose public repository is
+\url{https://github.com/yspennstate/math-brain-public}~\cite{MathBrainRepo}.
+
+\begin{thebibliography}{99}
+\bibitem{FK96} E.~Friedgut, G.~Kalai, Every monotone graph property has a sharp threshold, Proc. Amer. Math. Soc.
+124 (1996), 2993--3002.
+\bibitem{GMP} M.~J.~Gonz\'alez, P.~MacManus, M.~C.~Pereyra, Further evidence towards the Fourier
+entropy-influence conjecture, arXiv:2606.00246, 2026.
+\bibitem{Han} X.~Han, A new bound for the Fourier-entropy-influence conjecture, Combinatorica 45 (2025),
+arXiv:2312.08271.
+\bibitem{OT13} R.~O'Donnell, L.-Y.~Tan, A composition theorem for the Fourier entropy-influence conjecture, ICALP 2013.
+\bibitem{Shm1} Y.~Shmalo, The one-coordinate step in the Fourier entropy-influence conjecture,
+\url{https://github.com/yspennstate/fourier-entropy-influence-one-coordinate}, 2026.
+\bibitem{Shm3} Y.~Shmalo, Good coordinates in the Fourier entropy-influence conjecture,
+\url{https://github.com/yspennstate/fei-good-coordinates}, 2026.
+\bibitem{MathBrainRepo} Y.~Shmalo, \emph{Math Brain: public snapshot, code and tests}, 2026,
+\url{https://github.com/yspennstate/math-brain-public}.
+\bibitem{MathBrainPaper} Y.~Shmalo, \emph{Math Brain: shared, auditable memory for multi-agent mathematical research},
+October 2026, \url{https://github.com/yspennstate/math-brain-public/tree/main/papers/math-brain-2026-10-24}.
+\bibitem{BrainFramework} Y.~Shmalo, \emph{Brain Framework}, public software repository, 2026,
+\url{https://github.com/yspennstate/brain-framework-public}.
+\end{thebibliography}
+
+\end{document}
