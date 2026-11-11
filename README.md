@@ -33,6 +33,8 @@ The script needs Python 3 and NumPy. Its saved output is next to it.
   exact Walsh-Hadamard transforms on 58 random functions of 3 to 7 variables (all orders up to 6 variables), 60 random
   compositions and 80 random private ANDs, and the table of Section 7 (AND, majority and tribes).
 * `code/bent_point.py` (output `bent_point_out.txt`): the bent point replacement of Section 7, every coordinate.
+* `code/lean/FeiP5TwoSeq.lean`: a Lean 4 (Mathlib) proof of the two-sequence inequality with the constant
+  4/ln 2 + log2(1 + 2M) of Remark 3 (theorem `FeiP5.two_seq`, no `sorry`, standard axioms only).
 
 ## Related papers
 

@@ -153,6 +153,24 @@ contribute nothing. For $k_j=\min G_j$ the hypothesis gives $A_{G_j}\le\sum_{k\g
 and summing over $j$ with $\sum_j2^{-j}=2$ and $\sum_jj2^{-j}=2$ gives the claim.
 \end{proof}
 
+\begin{remark}\label{rem:two}
+Under the hypothesis of Lemma~\ref{lem:two} one also has $\sum_k\Phi(A_k,B_k)\le\bigl(4/\ln2+\log_2(1+2M)\bigr)\delta$,
+which is the smaller bound when $M\ge0.13$. Work in natural logarithms, put $c=1+2M$ and let $\beta_k$ be as in
+the proof of Lemma~\ref{lem:two}; indices with $B_k=0$ contribute only $A_k\ln1=0$. First,
+$a\ln(1+b/a)\le b$. Second, for $B_k>0$ we have $\beta_k>0$, and $\ln x\le x-1$ at $x=\beta_k^2(A_k+B_k)/(cB_k)$ gives
+\[
+B_k\ln\Bigl(1+\frac{A_k}{B_k}\Bigr)\le B_k\ln c-2B_k\ln\beta_k+\frac{\beta_k^2A_k}c,
+\]
+since $\beta_k^2\le1\le c$. Third, $\sum_kB_k(-\ln\beta_k)=\delta\sum_k(\beta_k-\beta_{k-1})(-\ln\beta_k)\le
+\delta\int_0^1(-\ln x)\,dx=\delta$, with $\beta_{-1}=0$. Fourth, with $T_l=\sum_{k\ge l}A_k\le M\delta/\beta_l$ (terms with $\beta_l=0$ vanish),
+\[
+\sum_kA_k\beta_k^2=\sum_l(\beta_l^2-\beta_{l-1}^2)T_l\le M\delta\sum_l\frac{(\beta_l-\beta_{l-1})(\beta_l+\beta_{l-1})}{\beta_l}
+\le2M\delta.
+\]
+Adding, $\sum_k\Phi(A_k,B_k)\ln2\le\delta+\delta\ln c+2\delta+2M\delta/c\le(4+\ln c)\delta$. In particular the constant
+in Theorem~\ref{thm:suff} may be replaced by $4/\ln2+\log_2(1+2\max(M,1))$.
+\end{remark}
+
 For a set $R$ of coordinates other than $i$, let $x^R$ be $x$ with the coordinates in $R$ replaced by independent
 uniform bits, and put
 \begin{align*}
@@ -349,7 +367,8 @@ results were developed with the Brain~\cite{BrainFramework} and Math Brain~\cite
 Claude Fable agent (Anthropic), connected to the Brain and working alongside Codex agents running OpenAI's GPT-6.1 on
 the same problem, found the witness, its martingale form, the two-sequence condition and its resampling form, the
 composition formula, the private-AND bound and the windows. Claude Opus 5.5 (Anthropic)
-rederived each proof, wrote the numerical checks, prepared the manuscript and audited it. These checks are not peer
+rederived each proof, wrote the numerical checks, prepared the manuscript and audited it. A further Claude agent
+found the bound of Remark~\ref{rem:two} and checked it in Lean~4 with Mathlib (file in the code repository). These checks are not peer
 review. The author directed the work and is responsible for the content of the paper and for decisions concerning its
 dissemination.
 
