@@ -24,16 +24,14 @@
 \begin{document}
 
 \begin{abstract}
-For a Boolean function $f$ and a coordinate $i$, the erasure entropy $E_i(f)$ is the conditional entropy of the event
+The erasure entropy $E_i(f)$ of a coordinate $i$ of a Boolean function $f$ is the conditional entropy of the event
 $i\in U$ given $U\setminus\{i\}$, where $U$ is drawn from the spectral distribution $\hat f^2$. The Fourier
-entropy-influence conjecture is equivalent to the existence of an absolute $c$ such that every non-constant $f$ has a
-coordinate with $E_i(f)\le c\,\Inf_i(f)$. We bound $E_i$ by revealing the other coordinates one at a time and
-conditioning only on the last revealed coordinate that the spectral sample contains. The resulting bound $L^\pi_i$
-depends on the order $\pi$, lies between $E_i$ and the binary entropy of $\Inf_i$, and can be minimised over all orders
-by a shortest-path recursion. We give a pivotality condition along the order under which $L^\pi_i=O(\Inf_i)$, an exact
-formula for $E_i$ under block composition, and the bound $L^\pi_i/\Inf_i\le2+2^{-d}(2d+\log_2(1/\rho))$ for a
-coordinate that enters only through one AND of $d+1$ variables and is pivotal with probability $\rho$. Conditioning on
-the last $r$ revealed coordinates gives a decreasing family of bounds that reaches $E_i$ at $r=n-1$.
+entropy-influence conjecture is equivalent to every non-constant $f$ having a coordinate with $E_i(f)\le c\,\Inf_i(f)$
+for an absolute $c$. We bound $E_i$ by revealing the other coordinates in an order $\pi$ and conditioning only on the
+last revealed coordinate that the spectral sample contains. The resulting bound $L^\pi_i$ lies between $E_i$ and the
+binary entropy of $\Inf_i$, and its minimum over all orders is computed by a shortest-path recursion. We give a
+pivotality condition under which $L^\pi_i=O(\Inf_i)$, an exact formula for $E_i$ under block composition, and an
+explicit bound for a coordinate that enters only through one AND.
 \end{abstract}
 
 \subjclass[2020]{06E30, 42C10, 94A17}
