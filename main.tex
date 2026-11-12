@@ -28,11 +28,11 @@ The erasure entropy $E_i(f)$ of a coordinate $i$ of a Boolean function $f$ is th
 $i\in U$ given $U\setminus\{i\}$, where $U$ is drawn from the spectral distribution $\hat f^2$. The Fourier
 entropy-influence conjecture is equivalent to every non-constant $f$ having a coordinate with $E_i(f)\le c\,\Inf_i(f)$
 for an absolute $c$. We bound $E_i$ by revealing the other coordinates in an order $\pi$ and conditioning only on the
-last revealed coordinate that the spectral sample contains. The resulting bound $L^\pi_i$ lies between $E_i$ and the
-binary entropy of $\Inf_i$, and its minimum over all orders is computed by a shortest-path recursion. We show that
-$L^\pi_i=O(\Inf_i)$ when the pivotality of $i$ loses its correlation slowly enough as the coordinates are resampled
-along the order, compute $E_i$ exactly for block compositions, and show that for a coordinate entering only through one
-AND of many variables the ratio $E_i/\Inf_i$ tends to $2$ unless the coordinate is very rarely pivotal.
+last revealed coordinate in the spectral sample. The bound $L^\pi_i$ lies between $E_i$ and the binary entropy of
+$\Inf_i$, and a shortest-path recursion minimises it over all orders. It is $O(\Inf_i)$ when the pivotality of $i$
+loses its correlation slowly as coordinates are resampled along the order. We also compute $E_i$ for block
+compositions, and show that $E_i/\Inf_i$ tends to $2$ at a coordinate entering only through one long AND, unless that
+coordinate is very rarely pivotal.
 \end{abstract}
 
 \subjclass[2020]{06E30, 42C10, 94A17}
